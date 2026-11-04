@@ -1,0 +1,163 @@
+# Painel de edição do site HCG (Sveltia CMS). Entrar: /admin > "Entrar Usando Token de Acesso" (token do GitHub)
+backend:
+  name: github
+  repo: hcgconsultoria/hcgconsultoria.github.io
+  branch: main
+  commit_messages:
+    update: "Atualiza {{collection}}: {{slug}}"
+
+site_url: https://hcgconsultoria.com.br
+display_url: https://hcgconsultoria.com.br
+logo_url: /favicon.svg
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: paginas
+    label: Conteúdo do site
+    description: "Ao salvar, o GitHub publica o site novo em 1 a 2 minutos."
+    editor:
+      preview: false
+    files:
+      - name: inicio
+        label: Página inicial
+        file: content/inicio.json
+        fields:
+          - label: Aviso no topo (faixa abaixo dos números)
+            name: aviso
+            widget: object
+            collapsed: false
+            fields:
+              - { label: "Mostrar o aviso", name: ativo, widget: boolean }
+              - { label: "Destaque em negrito", name: destaque, widget: string, hint: "Ex.: FAP 2027:" }
+              - { label: "Texto", name: texto, widget: string }
+              - { label: "Texto do link", name: link_texto, widget: string, required: false }
+              - { label: "Endereço do link", name: link_url, widget: string, required: false, hint: "Ex.: /fap-2027/ ou /contato/" }
+              - label: "Esconder automaticamente depois de"
+                name: expira
+                widget: datetime
+                required: false
+                format: YYYY-MM-DD
+                date_format: DD/MM/YYYY
+                time_format: false
+                picker_utc: true
+                hint: "O aviso some sozinho depois desta data. Deixe vazio para não expirar."
+          - label: Abertura (topo da página)
+            name: hero
+            widget: object
+            fields:
+              - { label: "Selo acima do título", name: selo, widget: string }
+              - { label: "Título", name: titulo, widget: string }
+              - { label: "Final do título em dourado", name: destaque, widget: string, required: false }
+              - { label: "Texto", name: texto, widget: text }
+              - { label: "Credenciais (com ✓)", name: provas, widget: list, field: { label: Item, name: item, widget: string } }
+          - label: Números em destaque
+            name: numeros
+            widget: list
+            min: 4
+            max: 4
+            summary: "{{fields.valor}} — {{fields.legenda}}"
+            hint: "Números contam a partir de zero quando aparecem na tela (ex.: R$ 500 mi+, 3 dias úteis)."
+            fields:
+              - { label: "Valor", name: valor, widget: string }
+              - { label: "Legenda", name: legenda, widget: string }
+              - label: Ícone
+                name: icone
+                widget: select
+                options:
+                  - { label: "Relógio", value: relogio }
+                  - { label: "Documento", value: documento }
+                  - { label: "Moedas", value: moedas }
+                  - { label: "Prêmio", value: premio }
+                  - { label: "Gráfico", value: grafico }
+                  - { label: "Escudo", value: escudo }
+                  - { label: "Lupa", value: lupa }
+                  - { label: "Pessoa", value: pessoa }
+                  - { label: "Camadas", value: camadas }
+                  - { label: "Prédio", value: predio }
+          - label: Bloco "Liderança"
+            name: lideranca
+            widget: object
+            fields:
+              - { label: "Título", name: titulo, widget: string }
+              - { label: "Texto", name: texto, widget: text }
+              - { label: "Destaques do fundador", name: destaques, widget: list, field: { label: Item, name: item, widget: string }, hint: "Use **texto** para negrito." }
+          - label: Perguntas frequentes
+            name: faq
+            widget: list
+            summary: "{{fields.pergunta}}"
+            hint: "A primeira pergunta aparece aberta. Arraste para reordenar."
+            fields:
+              - { label: "Pergunta", name: pergunta, widget: string }
+              - { label: "Resposta", name: resposta, widget: text }
+
+      - name: quem-somos
+        label: Quem somos
+        file: content/quem-somos.json
+        fields:
+          - { label: "Título", name: titulo, widget: string }
+          - { label: "Parágrafos", name: paragrafos, widget: list, field: { label: Parágrafo, name: paragrafo, widget: text } }
+          - { label: "Áreas de atuação", name: areas, widget: list, field: { label: Área, name: area, widget: string } }
+          - label: Fundador
+            name: fundador
+            widget: object
+            fields:
+              - { label: "Nome", name: nome, widget: string }
+              - { label: "Cargo", name: cargo, widget: string }
+              - { label: "Iniciais (círculo)", name: iniciais, widget: string, pattern: ['^.{1,3}$', "Até 3 letras"] }
+              - { label: "Destaques", name: destaques, widget: list, field: { label: Item, name: item, widget: string }, hint: "Use **texto** para negrito." }
+
+      - name: fap
+        label: Página FAP
+        file: content/fap.json
+        fields:
+          - { label: "Frase de abertura", name: chamada, widget: text }
+          - label: Prazos
+            name: prazos
+            widget: list
+            summary: "{{fields.data}} — {{fields.descricao}}"
+            fields:
+              - { label: "Data ou período", name: data, widget: string, hint: "Ex.: 01 a 30/11/2026" }
+              - { label: "Descrição", name: descricao, widget: string }
+
+      - name: analytics
+        label: Análise de visitas (Google Analytics, mapa de calor e LinkedIn)
+        file: content/analytics.json
+        fields:
+          - label: "ID do Google Analytics 4"
+            name: ga4_id
+            widget: string
+            required: false
+            pattern: ['^(G-[A-Z0-9]{4,})?$', "Formato G-XXXXXXXXXX"]
+            hint: "Visitas, origem, páginas e conversões. Em analytics.google.com > Administrador > Fluxos de dados > ID da métrica (G-...). Vazio = desligado."
+          - label: "ID do projeto no Microsoft Clarity"
+            name: clarity_id
+            widget: string
+            required: false
+            hint: "Mapa de calor, cliques e gravações. Em clarity.microsoft.com > Configurações > Visão geral > ID do projeto (ex.: abc12de34f). Vazio = desligado."
+          - label: "Partner ID da LinkedIn Insight Tag"
+            name: linkedin_partner_id
+            widget: string
+            required: false
+            hint: "Empresas, cargos e setores dos visitantes. Em LinkedIn Campaign Manager > Análises > Insight Tag (só números). Vazio = desligado."
+
+      - name: formularios
+        label: Formulários (envio por e-mail)
+        file: content/formularios.json
+        fields:
+          - label: "Chave de acesso do Web3Forms"
+            name: web3forms_key
+            widget: string
+            required: false
+            pattern: ['^([0-9a-fA-F-]{36})?$', "A chave tem 36 caracteres (ex.: 1a2b3c4d-....)"]
+            hint: "Gere grátis em web3forms.com com o e-mail contato@hcgconsultoria.com.br. Vazio = o formulário abre o e-mail do visitante com o pedido pronto."
+
+      - name: contato
+        label: Contatos e redes
+        file: content/contato.json
+        fields:
+          - { label: "WhatsApp (só números, com 55 e DDD)", name: whatsapp, widget: string, pattern: ['^\d{12,13}$', "Ex.: 5531993938133"] }
+          - { label: "Telefone (como aparece no site)", name: telefone, widget: string }
+          - { label: "E-mail", name: email, widget: string }
+          - { label: "LinkedIn da empresa", name: linkedin_empresa, widget: string }
+          - { label: "LinkedIn do fundador", name: linkedin_fundador, widget: string }
