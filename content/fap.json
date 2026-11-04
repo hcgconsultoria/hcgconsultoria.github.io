@@ -1,0 +1,17 @@
+{
+  "chamada": "O mesmo RAT de 3% pode custar de 1,5% a 6% da folha. O prazo de contestação vai de 1º a 30/11/2026.",
+  "prazos": [
+    {
+      "data": "30/09/2026",
+      "descricao": "FAP 2027 disponível no FAPWeb"
+    },
+    {
+      "data": "01 a 30/11/2026",
+      "descricao": "prazo para contestação"
+    },
+    {
+      "data": "30 dias",
+      "descricao": "para recurso após o resultado"
+    }
+  ]
+}

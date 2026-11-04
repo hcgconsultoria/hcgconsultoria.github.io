@@ -1,0 +1,26 @@
+{
+  "titulo": "A HCG Consultoria",
+  "paragrafos": [
+    "A HCG Consultoria Empresarial é especializada em compliance trabalhista e previdenciário e em recuperação de créditos previdenciários. Atuamos de forma técnica e consultiva em toda a cadeia de obrigações da folha de pagamento.",
+    "Partimos dos dados de folha, eSocial e saúde e segurança do trabalho para chegar a diagnósticos objetivos, com o impacto financeiro de cada ponto e o caminho para resolvê-lo. A linguagem é direta e as entregas são preparadas para a tomada de decisão."
+  ],
+  "areas": [
+    "Auditoria e revisão trabalhista e previdenciária da folha de pagamento",
+    "Retificações e obrigações acessórias: eSocial, EFD-Reinf, DCTFWeb e GFIP",
+    "Suporte técnico ao contencioso administrativo e a fiscalizações previdenciárias",
+    "Contestação técnica do FAP: fatores indevidos, vínculos, acidentalidade e CAT",
+    "Análise e contestação de NTEP com nexo técnico, dados epidemiológicos e laudos"
+  ],
+  "fundador": {
+    "nome": "Pedro Couto",
+    "cargo": "Fundador da HCG Consultoria",
+    "iniciais": "PC",
+    "destaques": [
+      "**+15 anos** em consultoria trabalhista e previdenciária",
+      "Atuação com empresas nacionais, multinacionais e entidades de grande porte",
+      "Passagem pela **EY** como gerente trabalhista e previdenciário",
+      "Participação em projetos que identificaram **mais de R$ 500 milhões** em créditos",
+      "Graduado em Ciências Contábeis, com MBA em Gestão de Projetos"
+    ]
+  }
+}
