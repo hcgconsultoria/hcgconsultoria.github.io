@@ -8,7 +8,7 @@ Nas páginas, as áreas editáveis ficam entre comentários:
     <!--cms:nome--> ... <!--/cms:nome-->
 O que está entre eles é substituído pelo conteúdo de content/*.json.
 
-Uso:  python build.py        (Netlify roda isso a cada alteração)
+Uso:  python build.py        (o GitHub roda isso a cada alteração; ver .github/workflows)
 Só usa a biblioteca padrão do Python.
 """
 import datetime
@@ -153,9 +153,16 @@ def r_analytics(c):
     linkedin = re.sub(r'\D', '', str(a.get('linkedin_partner_id', '')))
     if ga4 and not re.fullmatch(r'G-[A-Z0-9]{4,}', ga4):
         raise SystemExit(f'ID do Google Analytics inválido: {ga4!r} (formato G-XXXXXXXXXX)')
-    if not (ga4 or clarity or linkedin):
-        return ''
-    return '<script>window.HCG_ANALYTICS=' + json.dumps({'ga4': ga4, 'clarity': clarity, 'linkedin': linkedin}) + ';</script>'
+    out = ''
+    if ga4 or clarity or linkedin:
+        out += '<script>window.HCG_ANALYTICS=' + json.dumps({'ga4': ga4, 'clarity': clarity, 'linkedin': linkedin}) + ';</script>'
+    # chave pública do Web3Forms (envio dos formulários por e-mail)
+    key = str(c['formularios'].get('web3forms_key', '')).strip()
+    if key:
+        if not re.fullmatch(r'[0-9a-fA-F-]{36}', key):
+            raise SystemExit(f'Chave do Web3Forms inválida: {key!r}')
+        out += '<script>window.HCG_FORM_KEY=' + json.dumps(key) + ';</script>'
+    return out
 
 
 RENDER = {
@@ -186,7 +193,7 @@ def contact_swaps(contato):
 
 
 def build():
-    c = {n: load(n) for n in ('contato', 'inicio', 'quem-somos', 'fap', 'analytics')}
+    c = {n: load(n) for n in ('contato', 'inicio', 'quem-somos', 'fap', 'analytics', 'formularios')}
     if DIST.exists():
         shutil.rmtree(DIST)
     shutil.copytree(PUBLIC, DIST)

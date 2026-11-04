@@ -1,4 +1,4 @@
-# Painel de edição do site HCG (Decap CMS)
+# Painel de edição do site HCG (Sveltia CMS). Entrar: /admin > "Entrar Usando Token de Acesso" (token do GitHub)
 backend:
   name: github
   repo: hcgconsultoria/hcgconsultoria.github.io
@@ -6,7 +6,6 @@ backend:
   commit_messages:
     update: "Atualiza {{collection}}: {{slug}}"
 
-locale: pt
 site_url: https://hcgconsultoria.com.br
 display_url: https://hcgconsultoria.com.br
 logo_url: /favicon.svg
@@ -16,7 +15,7 @@ public_folder: /uploads
 collections:
   - name: paginas
     label: Conteúdo do site
-    description: "Ao salvar e publicar, o site é atualizado em cerca de 1 minuto."
+    description: "Ao salvar, o GitHub publica o site novo em 1 a 2 minutos."
     editor:
       preview: false
     files:
@@ -141,6 +140,17 @@ collections:
             widget: string
             required: false
             hint: "Empresas, cargos e setores dos visitantes. Em LinkedIn Campaign Manager > Análises > Insight Tag (só números). Vazio = desligado."
+
+      - name: formularios
+        label: Formulários (envio por e-mail)
+        file: content/formularios.json
+        fields:
+          - label: "Chave de acesso do Web3Forms"
+            name: web3forms_key
+            widget: string
+            required: false
+            pattern: ['^([0-9a-fA-F-]{36})?$', "A chave tem 36 caracteres (ex.: 1a2b3c4d-....)"]
+            hint: "Gere grátis em web3forms.com com o e-mail contato@hcgconsultoria.com.br. Vazio = o formulário abre o e-mail do visitante com o pedido pronto."
 
       - name: contato
         label: Contatos e redes

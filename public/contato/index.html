@@ -92,10 +92,9 @@
           <a class="btn btn-line" href="https://www.linkedin.com/company/146670800/" target="_blank" rel="noopener">HCG no LinkedIn</a>
         </div>
       </div>
-      <form class="lead-form" id="form" name="contato" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-        <input type="hidden" name="form-name" value="contato">
+      <form class="lead-form" id="form" name="contato" novalidate>
         <input type="hidden" name="subject" value="Novo contato | Site HCG">
-        <p hidden><label>Não preencha este campo <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
         <div class="field"><label for="nome">Nome</label><input id="nome" name="nome" autocomplete="name" required></div>
         <div class="field"><label for="empresa">Empresa ou escritório</label><input id="empresa" name="empresa" autocomplete="organization" required></div>
         <div class="field"><label for="email">E-mail corporativo</label><input id="email" name="email" type="email" autocomplete="email" required></div>

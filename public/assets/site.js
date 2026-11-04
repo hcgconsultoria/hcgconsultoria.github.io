@@ -5,9 +5,10 @@
   /* ===== Configuração ===== */
   var WHATSAPP = '5531993938133';
   var EMAIL = 'contato@hcgconsultoria.com.br';
-  /* Formulários: no site publicado na Netlify, os pedidos são gravados pela
-     Netlify Forms (com aviso por e-mail). No computador (localhost) ou se o
-     envio falhar, o pedido segue pelo WhatsApp com a mensagem pronta. */
+  /* Formulários: enviados por e-mail pelo Web3Forms (chave colada no painel,
+     em "Formulários"). Sem chave, abre o e-mail do visitante com o pedido pronto.
+     No computador (localhost) nada é enviado: o pedido só é validado. */
+  var FORM_KEY = window.HCG_FORM_KEY || '';
   var LOCAL = location.protocol === 'file:' || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
 
   function $(s, c) { return (c || document).querySelector(s); }
@@ -416,23 +417,40 @@
         show('ok', '<b>Teste no computador: pedido validado</b><p>No site publicado, este pedido é enviado automaticamente para ' + EMAIL + '. Aqui no computador nada é enviado.</p>');
         return;
       }
-      // Navegador muito antigo: abre o e-mail do visitante com o pedido pronto.
-      if (!form.hasAttribute('data-netlify') || !window.fetch || !window.URLSearchParams) {
+      // Sem chave do Web3Forms (ou navegador muito antigo): abre o e-mail do visitante com o pedido pronto.
+      if (!FORM_KEY || !window.fetch) {
         location.href = mail;
         show('ok', '<b>Pedido pronto no seu e-mail</b><p>Abrimos o seu programa de e-mail com o pedido para ' + EMAIL + ': é só enviar. Se não abriu, ' + links + '.</p>');
         return;
       }
+      if (field('botcheck') && field('botcheck').checked) return; // robô de spam
 
+      var payload = {
+        access_key: FORM_KEY,
+        subject: val('subject') || 'Novo contato | Site HCG',
+        from_name: 'Site HCG Consultoria',
+        replyto: val('email'),
+        Formulário: form.getAttribute('name') === 'contato' ? 'Página de contato' : 'Análise inicial (página inicial)',
+        Nome: val('nome'),
+        Empresa: val('empresa'),
+        'E-mail': val('email'),
+        'Telefone/WhatsApp': val('fone') || '-',
+        Funcionários: val('func') || '-',
+        Assunto: val('tema') || '-',
+        Mensagem: val('msg') || '-',
+        Página: location.href
+      };
       submit.disabled = true;
       var label = submit.textContent;
       submit.textContent = 'Enviando…';
-      fetch('/', {
+      fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form)).toString()
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
       })
-        .then(function (r) {
-          if (!r.ok) throw new Error(r.status);
+        .then(function (r) { return r.json().catch(function () { return {}; }); })
+        .then(function (data) {
+          if (!data || data.success !== true) throw new Error((data && data.message) || 'falha');
           form.reset();
           track('generate_lead', { formulario: form.getAttribute('name'), assunto: val('tema'), funcionarios: val('func') });
           show('ok', '<b>Pedido enviado</b><p>Obrigado! Seu pedido chegou à equipe da HCG e retornaremos pelo e-mail informado em breve.</p>');

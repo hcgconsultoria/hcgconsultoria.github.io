@@ -1,90 +1,101 @@
-SITE HCG CONSULTORIA - PUBLICAÇÃO NA NETLIFY COM PAINEL DE EDIÇÃO
-==================================================================
+SITE HCG CONSULTORIA - GITHUB PAGES + REGISTRO.BR, COM PAINEL DE EDIÇÃO
+=======================================================================
 
-COMO FUNCIONA
+COMO FUNCIONA (tudo gratuito, sem selo de terceiros no site)
+  - Os arquivos do site ficam no GitHub: github.com/hcgconsultoria/hcgconsultoria.github.io
+  - A cada alteração, o GitHub gera o site (build.py) e publica sozinho (GitHub Pages)
+  - O domínio hcgconsultoria.com.br aponta para o GitHub pelo Registro.br
   - Você edita textos, FAQ, prazos e contatos em hcgconsultoria.com.br/admin
-  - Ao clicar em "Publicar", o painel salva no GitHub, a Netlify gera o site de
-    novo e ele fica no ar em cerca de 1 minuto.
-  - Os pedidos dos formulários ficam guardados na Netlify e chegam por e-mail.
-  Tudo nos planos gratuitos da Netlify e do GitHub.
+  - Os formulários chegam no e-mail pelo Web3Forms
 
 O QUE TEM NESTA PASTA
+  .github/workflows/publicar.yml  publica o site automaticamente (não mexer)
   public/        páginas do site, estilos (assets/), logos (marca/) e o painel (admin/)
-  content/       textos editáveis pelo painel (não precisa mexer à mão)
-  build.py       gera o site final em dist/ (a Netlify roda sozinha)
-  netlify.toml   configuração da Netlify
-  dist/          site final gerado no seu computador; NÃO envie para o GitHub
+  content/       textos editáveis pelo painel
+  build.py       gera o site final em dist/ (o GitHub roda sozinho)
 
 
-PASSO 1 - GITHUB (onde ficam os arquivos do site)
-  1. Crie uma conta grátis em github.com (se ainda não tiver).
-  2. Repositório usado: github.com/hcgconsultoria/hcgconsultoria.github.io
-     (já configurado no painel, em public/admin/config.yml).
-  3. No repositório, clique em "Add file" > "Upload files" e arraste para a
-     página o CONTEÚDO da pasta descompactada (não o .zip):
-     build.py, netlify.toml, .gitignore, LEIA-ME.txt, content/ e public/.
+PASSO 1 - ENVIAR OS ARQUIVOS PARA O GITHUB
+  1. No repositório, apague o arquivo netlify.toml (abra o arquivo > "..." >
+     "Delete file" > "Commit changes"). Ele não é mais usado.
+  2. "Add file" > "Upload files" e arraste o CONTEÚDO da pasta hcg-site
+     (inclusive a pasta .github). Os arquivos com o mesmo nome são substituídos.
      Clique em "Commit changes".
+     Se a pasta .github não for aceita no arraste: "Add file" > "Create new
+     file", digite o nome  .github/workflows/publicar.yml  e cole o conteúdo
+     do arquivo publicar.yml. "Commit changes".
 
-PASSO 2 - NETLIFY (onde o site fica no ar)
-  1. Em app.netlify.com, entre com "Sign up with GitHub".
-  2. "Add new project" > "Import an existing project" > GitHub > escolha hcg-site.
-  3. As configurações já vêm do netlify.toml. Clique em "Deploy".
-  4. Em 1-2 minutos o site fica no ar num endereço provisório (xxxx.netlify.app).
+PASSO 2 - LIGAR O GITHUB PAGES
+  1. No repositório: "Settings" > "Pages".
+  2. Em "Build and deployment" > "Source", escolha "GitHub Actions".
+  3. Abra a aba "Actions": o "Publicar site" roda em 1-2 minutos (ícone verde).
+     Se não começar, clique em "Publicar site" > "Run workflow".
+  4. O site fica no ar em https://hcgconsultoria.github.io
 
-PASSO 3 - FORMULÁRIOS POR E-MAIL
-  1. Na Netlify, abra o projeto > "Forms" > "Enable form detection".
-  2. Vá em "Deploys" > "Trigger deploy" > "Deploy site" (para a Netlify
-     encontrar os formulários "analise-inicial" e "contato").
-  3. Em "Forms" > "Form notifications" > "Add notification" > "Email
-     notification": coloque contato@hcgconsultoria.com.br, para todos os formulários.
-  Pronto: cada pedido aparece em "Forms" e chega no e-mail. Se o envio falhar,
-  o site oferece WhatsApp e e-mail ao visitante.
+PASSO 3 - DOMÍNIO hcgconsultoria.com.br NO REGISTRO.BR
+  1. No GitHub: "Settings" > "Pages" > "Custom domain": digite
+     hcgconsultoria.com.br e clique em "Save".
+  2. Em registro.br, entre na sua conta > clique no domínio > "DNS".
+     - Se aparecer que o domínio usa servidores DNS da Netlify (nsone.net ou
+       netlify), clique em "Alterar servidores DNS" > "Utilizar os DNS do
+       Registro.br" e salve.
+     - Clique em "Editar zona" (ou "Configurar endereçamento") e deixe assim:
+         Tipo A      nome (vazio)   185.199.108.153
+         Tipo A      nome (vazio)   185.199.109.153
+         Tipo A      nome (vazio)   185.199.110.153
+         Tipo A      nome (vazio)   185.199.111.153
+         Tipo CNAME  nome www       hcgconsultoria.github.io
+       Apague registros antigos da Netlify (ex.: A 75.2.60.5 ou CNAME para
+       netlify.app). NÃO apague registros MX/TXT do e-mail.
+  3. A propagação leva de minutos a algumas horas. Quando o GitHub mostrar
+     "DNS check successful", marque "Enforce HTTPS" (cadeado).
+  4. Depois que o site abrir pelo GitHub, exclua o projeto na Netlify
+     (app.netlify.com > projeto > "Project configuration" > "Delete project").
 
-PASSO 4 - LIBERAR O LOGIN DO PAINEL
-  1. No GitHub: foto (canto superior direito) > Settings > Developer settings >
-     OAuth Apps > "New OAuth App".
-       Application name:        Painel HCG
-       Homepage URL:            o endereço do site (ex.: https://xxxx.netlify.app)
-       Authorization callback:  https://api.netlify.com/auth/done
-     Clique em "Register application", depois em "Generate a new client secret".
-  2. Na Netlify: projeto > "Project configuration" > "Access & security" >
-     "OAuth" > "Install a provider" > GitHub. Cole o Client ID e o Client Secret.
-  3. Acesse SEU-SITE/admin e clique em "Entrar com o GitHub".
+PASSO 4 - FORMULÁRIOS NO SEU E-MAIL (Web3Forms, grátis)
+  1. Acesse web3forms.com, digite contato@hcgconsultoria.com.br e peça a
+     "Access Key" (chega por e-mail; a caixa de e-mail precisa existir).
+  2. Cole a chave no painel: /admin > "Formulários (envio por e-mail)" > Salvar.
+  Enquanto não houver chave, o formulário abre o e-mail do visitante com o
+  pedido pronto para contato@hcgconsultoria.com.br.
 
-PASSO 5 - DOMÍNIO hcgconsultoria.com.br
-  Na Netlify: "Domain management" > "Add a domain" > hcgconsultoria.com.br e
-  siga as instruções para apontar o DNS no Registro.br. O HTTPS é automático.
-  Depois, em "Homepage URL" do OAuth App do GitHub, troque para o domínio novo.
-
+PASSO 5 - ENTRAR NO PAINEL (/admin)
+  1. No GitHub: foto > "Settings" > "Developer settings" > "Personal access
+     tokens" > "Fine-grained tokens" > "Generate new token".
+       Nome: Painel HCG    Validade: 1 ano (anote para renovar)
+       Repository access: "Only select repositories" > hcgconsultoria.github.io
+       Permissions > Repository > "Contents": "Read and write"
+     Clique em "Generate token" e copie o código (aparece uma vez só).
+  2. Acesse hcgconsultoria.com.br/admin > "Entrar Usando Token de Acesso" > cole o token.
+     O navegador lembra o acesso; não compartilhe o token com ninguém.
 
 PASSO 6 - MEDIÇÃO DE VISITAS (mapa de calor, cliques e quem acessou)
-  As ferramentas só funcionam depois que você cola os códigos no painel:
-  /admin > Conteúdo do site > "Análise de visitas". Elas só carregam para
-  quem aceitar os cookies no aviso do site (LGPD).
+  Cole os códigos no painel: /admin > "Análise de visitas". As ferramentas só
+  carregam para quem aceitar os cookies no aviso do site (LGPD).
   a) Microsoft Clarity (grátis) - mapa de calor, cliques, rolagem e gravações
-     clarity.microsoft.com > entre com a conta Microsoft > "Novo projeto" >
-     site https://hcgconsultoria.com.br > copie o "ID do projeto".
-  b) Google Analytics 4 (grátis) - visitas, origem (Google, LinkedIn...),
-     páginas mais vistas e pedidos enviados (evento generate_lead)
-     analytics.google.com > Criar conta/propriedade > Fluxo de dados "Web" >
-     copie o "ID da métrica" (G-XXXXXXXXXX).
-  c) LinkedIn Insight Tag (grátis) - empresas, cargos, setores e senioridade
-     de quem visitou (dados agregados de membros do LinkedIn)
-     linkedin.com/campaignmanager > crie a conta de anúncios vinculada à
-     página da HCG (não precisa anunciar) > Analisar > Insight Tag > copie
-     o "Partner ID" (só números). Relatório em "Dados demográficos do site".
+     clarity.microsoft.com > "Novo projeto" > site https://hcgconsultoria.com.br
+     > copie o "ID do projeto".
+  b) Google Analytics 4 (grátis) - visitas, origem, páginas e pedidos enviados
+     analytics.google.com > criar propriedade > fluxo de dados "Web" > copie o
+     "ID da métrica" (G-XXXXXXXXXX).
+  c) LinkedIn Insight Tag (grátis) - empresas, cargos e setores de quem visitou
+     (dados agregados de membros do LinkedIn)
+     linkedin.com/campaignmanager > conta de anúncios ligada à página da HCG
+     (não precisa anunciar) > Analisar > Insight Tag > copie o "Partner ID".
   Ações já registradas: cliques no WhatsApp, e-mail, telefone, LinkedIn e
-  botões, serviço visualizado, autodiagnóstico, simuladores e pedidos enviados.
+  botões, serviço visto, autodiagnóstico, simuladores e pedidos enviados.
+
 
 USANDO O PAINEL (hcgconsultoria.com.br/admin)
-  Página inicial ... aviso do topo (com data para sumir sozinho), título,
-                     texto, credenciais, os 4 números, bloco Liderança e FAQ
-  Quem somos ....... textos, áreas de atuação e dados do fundador
-  Página FAP ....... frase de abertura e quadro de prazos
-  Contatos e redes . WhatsApp, telefone, e-mail e LinkedIn (trocam no site todo)
-  Análise de visitas  códigos do Google Analytics, Clarity e LinkedIn
+  Página inicial ...... aviso do topo (com data para sumir sozinho), título,
+                        texto, credenciais, os 4 números, Liderança e FAQ
+  Quem somos .......... textos, áreas de atuação e dados do fundador
+  Página FAP .......... frase de abertura e quadro de prazos
+  Formulários ......... chave do Web3Forms
+  Análise de visitas .. códigos do Google Analytics, Clarity e LinkedIn
+  Contatos e redes .... WhatsApp, telefone, e-mail e LinkedIn (trocam no site todo)
   Dica: **texto** fica em negrito nos destaques e respostas.
-  Depois de "Publicar", espere cerca de 1 minuto e recarregue o site.
+  Depois de salvar, espere 1 a 2 minutos e recarregue o site (Ctrl+F5).
 
 OUTROS TEXTOS (páginas de serviço etc.)
   Ficam em public/ e podem ser editados no próprio GitHub (abra o arquivo >
@@ -92,11 +103,10 @@ OUTROS TEXTOS (páginas de serviço etc.)
   <!--cms:...--> e <!--/cms:...-->: essas partes vêm do painel.
 
 VER O SITE NO COMPUTADOR (opcional)
-  Na pasta do site, rode:   python build.py
-  Depois:                   python -m http.server 8765 --directory dist
-  E abra http://localhost:8765/  (no computador, o formulário usa o WhatsApp).
+  Na pasta do site:   python build.py
+  Depois:             python -m http.server 8765 --directory dist
+  Abra http://localhost:8765/  (no computador o formulário não envia nada).
 
 DEPOIS DE PUBLICAR
   - Google Search Console: envie https://hcgconsultoria.com.br/sitemap.xml
-  - Coloque o link do site na página da HCG no LinkedIn
   - Teste a prévia do link em linkedin.com/post-inspector

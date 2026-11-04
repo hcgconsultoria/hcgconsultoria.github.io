@@ -306,10 +306,9 @@
           <li><div class="n"><svg aria-hidden="true"><use href="#i-search"/></svg></div><div><b>Análise inicial em 3 dias úteis</b><span>Você vê o potencial de crédito antes de decidir.</span></div></li>
         </ol>
       </div>
-      <form class="lead-form hero-form" id="heroForm" name="analise-inicial" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate aria-labelledby="heroFormTitle">
-        <input type="hidden" name="form-name" value="analise-inicial">
+      <form class="lead-form hero-form" id="heroForm" name="analise-inicial" novalidate aria-labelledby="heroFormTitle">
         <input type="hidden" name="subject" value="Novo pedido de análise inicial | Site HCG">
-        <p hidden><label>Não preencha este campo <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
         <div class="hf-head"><h3 id="heroFormTitle">Quero a análise inicial</h3><p>Leva menos de 1 minuto.</p></div>
         <div class="field full"><label for="h-nome">Nome</label><input id="h-nome" name="nome" autocomplete="name" required></div>
         <div class="field full"><label for="h-empresa">Empresa</label><input id="h-empresa" name="empresa" autocomplete="organization" required></div>
