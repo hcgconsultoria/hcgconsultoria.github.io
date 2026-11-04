@@ -1,0 +1,82 @@
+{
+  "aviso": {
+    "ativo": true,
+    "destaque": "FAP 2027:",
+    "texto": "contestação até 30/11/2026. Um FAP acima do devido encarece toda a folha do ano.",
+    "link_texto": "Simular o impacto →",
+    "link_url": "/fap-2027/",
+    "expira": "2026-11-30"
+  },
+  "hero": {
+    "selo": "Análise inicial em 3 dias úteis · Apuração em 10 dias úteis",
+    "titulo": "Sua empresa pode estar pagando mais folha e mais INSS",
+    "destaque": "do que deve.",
+    "texto": "A HCG revisa a folha de pagamento com os seus dados reais, recupera as contribuições previdenciárias pagas a maior nos últimos 5 anos e corrige o que gera custo daqui em diante.",
+    "provas": [
+      "Ex-gerente trabalhista e previdenciário da EY",
+      "Projetos com mais de R$ 500 mi em créditos identificados"
+    ]
+  },
+  "numeros": [
+    {
+      "valor": "3 dias úteis",
+      "legenda": "Análise inicial com o potencial de crédito",
+      "icone": "relogio"
+    },
+    {
+      "valor": "10 dias úteis",
+      "legenda": "apuração completa de 5 anos",
+      "icone": "documento"
+    },
+    {
+      "valor": "R$ 500 mi+",
+      "legenda": "em créditos identificados em projetos",
+      "icone": "moedas"
+    },
+    {
+      "valor": "+15 anos",
+      "legenda": "de experiência, com passagem pela EY",
+      "icone": "premio"
+    }
+  ],
+  "lideranca": {
+    "titulo": "Especialistas em folha, com experiência de Big Four",
+    "texto": "A HCG Consultoria Empresarial é especializada em compliance trabalhista e previdenciário e em recuperação de créditos previdenciários. Partimos dos dados reais de folha, eSocial e SST para chegar a diagnósticos objetivos, com o impacto financeiro de cada ponto e o caminho para resolvê-lo.",
+    "destaques": [
+      "+15 anos em consultoria trabalhista e previdenciária",
+      "Ex-gerente trabalhista e previdenciário da EY",
+      "Projetos com mais de R$ 500 milhões em créditos identificados",
+      "Empresas nacionais, multinacionais e entidades de grande porte"
+    ]
+  },
+  "faq": [
+    {
+      "pergunta": "O que é a análise inicial?",
+      "resposta": "É uma prova de conceito: antes do projeto completo, analisamos uma amostra da sua folha, como alguns meses ou estabelecimentos, e mostramos se há crédito previdenciário a recuperar, em quais teses e uma estimativa do valor no período de 5 anos. Assim você decide com números da própria empresa."
+    },
+    {
+      "pergunta": "Quanto tempo leva para saber se há crédito?",
+      "resposta": "A análise inicial fica pronta em 3 dias úteis e mostra o potencial de crédito a partir de uma amostra. A apuração completa dos últimos 5 anos leva 10 dias úteis. Os prazos contam a partir do recebimento completo dos dados."
+    },
+    {
+      "pergunta": "Quais informações preciso enviar?",
+      "resposta": "Com a outorga da procuração eletrônica no e-CAC, nenhuma: a HCG baixa toda a documentação do diagnóstico direto do eSocial e do e-CAC. A procuração pode ser revogada pela empresa a qualquer momento."
+    },
+    {
+      "pergunta": "A minha equipe de RH vai ficar sobrecarregada?",
+      "resposta": "Não. Recebemos os arquivos e fazemos todo o processamento. A equipe só é acionada para dúvidas pontuais e para validar premissas."
+    },
+    {
+      "pergunta": "Recuperar crédito aumenta o risco com a Receita?",
+      "resposta": "Separamos os temas pacificados dos temas em discussão e documentamos cada valor em relatório técnico, pronto para uma fiscalização. A decisão sobre o que aproveitar é sempre da empresa, com o risco de cada item medido."
+    },
+    {
+      "pergunta": "Como o crédito volta para o caixa?",
+      "resposta": "Por compensação com contribuições futuras ou por restituição. Apoiamos a retificação do eSocial e da DCTFWeb e a elaboração do PER/DCOMP."
+    },
+    {
+      "pergunta": "Qual a diferença entre revisão trabalhista e diagnóstico previdenciário?",
+      "resposta": "A revisão trabalhista corrige as regras da folha para reduzir o custo daqui em diante. O diagnóstico previdenciário recupera o que já foi pago a maior nos últimos 5 anos. Os dois podem ser feitos no mesmo projeto."
+    }
+  ]
+}
