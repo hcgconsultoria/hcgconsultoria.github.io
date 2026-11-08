@@ -205,7 +205,7 @@ def build():
     files = sorted(DIST.rglob('*'), key=lambda f: (f.suffix == '.html', str(f)))
     for p in files:
         if p.suffix == '.html' and not ver:
-            for name in ('site.css', 'site.js'):
+            for name in ('site.css', 'site.js', 'calc-5x2.js'):
                 ver[name] = hashlib.md5((DIST / 'assets' / name).read_bytes()).hexdigest()[:10]
         if p.suffix not in ('.html', '.js', '.xml', '.txt') or p.parts[-2:] == ('admin', 'index.html'):
             continue
@@ -218,7 +218,7 @@ def build():
                 used.add(key)
                 return RENDER[key](c)
             s = MARK.sub(sub, s)
-            s = re.sub(r'(/assets/(site\.(?:css|js)))\?v=[\w-]+', lambda m: f'{m.group(1)}?v={ver[m.group(2)]}', s)
+            s = re.sub(r'(/assets/(site\.(?:css|js)|calc-5x2\.js))\?v=[\w-]+', lambda m: f'{m.group(1)}?v={ver[m.group(2)]}', s)
         for a, b in swaps:
             s = s.replace(a, b)
         if p.name == 'sitemap.xml':
