@@ -42,7 +42,7 @@
       E: val('c5HE'),
       ad: val('c5Ad') / 100,
       enc: val('c5Enc') / 100,
-      adic: val('c5Adic') / 100,
+      adic: val('c5Adic'),             // R$ por colaborador/mês
       ben: val('c5Ben'),
       adm: val('c5Adm'),
       vt: val('c5Vt'),
@@ -64,7 +64,7 @@
   }
 
   function modelo(p, J) {
-    var base = p.S * (1 + p.adic);
+    var base = p.S + p.adic;
     var Jn = Math.min(p.J0, J);
     var h0 = base / (p.J0 * 5), h1 = base / (Jn * 5);
     var perda = Math.max(0, p.J0 - Jn) * SEMANAS;
@@ -166,7 +166,7 @@
     return [
       ['Colaboradores na 6x1', n0.format(p.n)],
       ['Salário médio', brl2.format(p.S)],
-      ['Adicionais habituais', n1.format(p.adic * 100) + '%'],
+      ['Adicionais habituais por colaborador', brl2.format(p.adic)],
       ['Jornada atual', p.J0 + 'h'],
       ['Nova jornada', p.J + 'h'],
       ['Horas extras por colaborador/mês', n1.format(p.E) + ' h'],
@@ -251,7 +251,14 @@
   $('c5Regime').addEventListener('change', function () {
     if (this.value) { $('c5Enc').value = this.value; calc(); }
   });
-  ['c5Sal', 'c5Ben', 'c5Adm'].forEach(function (id) {
+  /* Explicação suspensa: passar o mouse, focar com o teclado ou tocar */
+  var tipBtn = $('c5AdicAj'), tipBox = tipBtn.parentNode;
+  function tip(aberto) { tipBox.classList.toggle('open', aberto); tipBtn.setAttribute('aria-expanded', aberto ? 'true' : 'false'); }
+  tipBtn.addEventListener('click', function (e) { e.preventDefault(); tip(!tipBox.classList.contains('open')); });
+  document.addEventListener('click', function (e) { if (!tipBox.contains(e.target)) tip(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') tip(false); });
+
+  ['c5Sal', 'c5Ben', 'c5Adm', 'c5Adic'].forEach(function (id) {
     var el = $(id);
     el.addEventListener('blur', function () { var x = num(el.value); el.value = x ? new Intl.NumberFormat('pt-BR').format(x) : ''; });
   });

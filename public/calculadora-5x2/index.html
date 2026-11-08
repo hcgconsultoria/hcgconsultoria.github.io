@@ -41,7 +41,7 @@
       <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h14M3 10h14M3 14h14"/></svg>
     </button>
     <nav class="nav" id="nav" aria-label="Principal">
-      <a href="/servicos/" data-nav="servicos">Serviços</a>
+      <a href="/servicos/" data-nav="servicos" aria-current="page">Serviços</a>
       <a href="/como-trabalhamos/" data-nav="como-trabalhamos">Como trabalhamos</a>
       <a href="/quem-somos/" data-nav="quem-somos">Quem somos</a>
       <a class="btn btn-gold" href="/contato/" data-nav="contato">Fale conosco</a>
@@ -76,7 +76,7 @@
 <div id="c5">
   <header class="pagehead on-band">
     <div class="wrap">
-      <nav class="crumbs" aria-label="Você está em"><a href="/">Início</a><span>/</span><a href="/servicos/fim-da-escala-6x1/">Fim da escala 6x1</a><span>/</span><span aria-current="page">Calculadora</span></nav>
+      <nav class="crumbs" aria-label="Você está em"><a href="/">Início</a><span>/</span><a href="/servicos/">Serviços</a><span>/</span><a href="/servicos/fim-da-escala-6x1/">Fim da escala 6x1</a><span>/</span><span aria-current="page">Calculadora</span></nav>
       <p class="eyebrow">Calculadora gratuita · EC nº 141/2026</p>
       <h1>Com o fim da 6x1, manter o quadro com hora extra ou contratar?</h1>
       <p class="lede">Compare as duas decisões linha a linha, com encargos, DSR, 13º e férias já na conta. Você informa os dados do seu grupo e o resultado aparece na hora.</p>
@@ -106,11 +106,11 @@
           <summary>Ajustes avançados</summary>
           <div class="fields">
             <div class="field"><label for="c5J0">Jornada atual (h/semana)</label><input id="c5J0" inputmode="numeric" value="44" autocomplete="off"></div>
-            <div class="field"><label for="c5Adic">Adicionais habituais (%)</label><input id="c5Adic" inputmode="decimal" value="0" autocomplete="off"></div>
+            <div class="field"><div class="c5-lab"><label for="c5Adic">Adicionais habituais (R$/mês)</label><button type="button" class="c5-aj" id="c5AdicAj" aria-label="O que são adicionais habituais?" aria-expanded="false" aria-controls="c5AdicTip">?</button><div class="c5-tip" id="c5AdicTip" role="tooltip"><b>O que são adicionais habituais?</b>Valores pagos todo mês que entram na base da hora extra: periculosidade, insalubridade, adicional noturno fixo, gratificações e anuênios.<span>Informe a média em R$ por colaborador. Se só parte do grupo recebe, divida o total pago pelo número de colaboradores.</span><span>Exemplo: periculosidade de 30% sobre R$ 2.500 = R$ 750.</span><span>Não inclua comissões nem horas extras.</span></div></div><input id="c5Adic" inputmode="decimal" value="0" autocomplete="off" aria-describedby="c5AdicTip"></div>
             <div class="field full"><label for="c5Dsr">Critério do DSR na 5x2 (ainda não pacificado)</label><select id="c5Dsr"><option value="8,22" selected>8 repousos em 22 dias úteis</option><option value="9,21">9 repousos em 21 dias úteis</option><option value="4,22">4 repousos em 22 dias úteis</option></select></div>
             <div class="field full"><label for="c5Tipo">Tipo de contratação</label><select id="c5Tipo"><option value="integral" selected>Tempo integral</option><option value="parcial">Tempo parcial (30h semanais)</option></select></div>
             <div class="field"><label for="c5Ben">Benefícios por contratado (R$)</label><input id="c5Ben" inputmode="decimal" value="700" autocomplete="off"></div>
-            <div class="field"><label for="c5Adm">Admissão por contratado (R$)</label><input id="c5Adm" inputmode="decimal" value="2.000" autocomplete="off"></div>
+            <div class="field"><label for="c5Adm">Admissão por contratado (R$)</label><input id="c5Adm" inputmode="decimal" value="500" autocomplete="off" aria-describedby="c5AdmH"><small class="c5-hint" id="c5AdmH">Exame admissional, divulgação da vaga, uniforme e integração.</small></div>
             <div class="field full"><label for="c5Vt">Vale-transporte por dia, ida e volta (R$)</label><input id="c5Vt" inputmode="decimal" value="11" autocomplete="off" aria-describedby="c5VtH"><small class="c5-hint" id="c5VtH">Informe 0 para desconsiderar.</small></div>
           </div>
         </details>
@@ -223,7 +223,6 @@
         <a href="/servicos/">Serviços</a>
         <a href="/como-trabalhamos/">Como trabalhamos</a>
         <a href="/quem-somos/">Quem somos</a>
-        <a href="/calculadora-5x2/">Calculadora 6x1 → 5x2</a>
         <a href="/contato/">Contato</a>
       </nav>
     </div>

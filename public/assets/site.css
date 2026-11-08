@@ -607,6 +607,14 @@ svg use{pointer-events:none}
 .c5-in .field select{font-family:var(--f-body);font-size:.9rem}
 .calc .field input[type=range]{accent-color:#C9A553;height:28px;padding:0;border:0;background:none}
 .c5-hint{font-size:.76rem;color:var(--band-muted);line-height:1.4}
+.c5-lab{position:relative;display:flex;align-items:flex-end;gap:6px}
+.c5-aj{flex:none;width:20px;height:20px;padding:0;border-radius:50%;border:1px solid var(--band-muted);background:none;color:var(--band-ink);font:600 .72rem/1 var(--f-body);cursor:pointer}
+.c5-aj:hover,.c5-lab.open .c5-aj{border-color:var(--gold);color:var(--gold)}
+.c5-aj:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.c5-tip{position:absolute;right:0;top:calc(100% + 8px);z-index:5;width:min(280px,78vw);padding:12px 14px;border-radius:var(--r);border:1px solid var(--gold);background:var(--surface);color:var(--ink);font-size:.8rem;line-height:1.45;box-shadow:0 8px 24px rgba(10,37,64,.28);opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .15s,transform .15s,visibility .15s}
+.c5-tip b{display:block;margin-bottom:4px}
+.c5-tip span{display:block;margin-top:6px;color:var(--ink-2)}
+.c5-aj:hover + .c5-tip,.c5-aj:focus-visible + .c5-tip,.c5-lab.open .c5-tip{opacity:1;visibility:visible;transform:none}
 .c5-seg{border:0;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .c5-seg legend{padding:0;margin-bottom:6px;font-size:.8rem;font-weight:600;color:var(--band-muted)}
 .c5-seg label{cursor:pointer;position:relative}
