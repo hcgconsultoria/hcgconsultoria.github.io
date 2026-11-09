@@ -157,6 +157,82 @@
     $('c5Body').innerHTML = html;
   }
 
+  /* ===== Relatório para PDF (A4, com a identidade da HCG) ===== */
+  var TEL = '+55 (31) 99393-8133';  // trocado no build pelo telefone de content/contato.json
+  var LINKEDIN = 'https://www.linkedin.com/company/146670800/';
+  var TITULO_PDF = 'HCG Consultoria - Estudo de impacto 6x1 para 5x2';
+  var relBox = document.createElement('div');
+  relBox.id = 'c5Rel';
+  relBox.className = 'c5-rel';
+  document.body.appendChild(relBox);
+  document.body.classList.add('c5-tem-rel');
+  var relPag = document.createElement('style');
+  relPag.media = 'print';
+  relPag.textContent = '@page{size:A4;margin:0}';
+  document.head.appendChild(relPag);
+
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function relTopo(sub) {
+    var logo = document.querySelector('.top .logo svg');
+    return '<div class="r-topo">' + (logo ? logo.outerHTML : '<b>HCG Consultoria</b>') +
+      '<div><b>Estudo de impacto</b><span>' + sub + '</span></div></div>';
+  }
+  function relPe(n) {
+    return '<div class="r-pe"><div><b>HCG Consultoria Empresarial</b> · CNPJ 48.539.073/0001-82<br>hcgconsultoria.com.br · ' + EMAIL + ' · ' + TEL + '</div><span>Página ' + n + ' de 2</span></div>';
+  }
+  function relLinhas(m) {
+    var M = '•••••';
+    return LINHAS.map(function (r) {
+      if (r.g) return '<tr class="r-g"><th colspan="5">' + r.g + '</th></tr>';
+      var trava = r.lock && !liberado;
+      function v(x) { return r.c ? r.c(x, m) : x[r.k]; }
+      function f(x) { var y = v(x); return trava ? M : (y === 0 && r.lock ? D : r.f(y)); }
+      function al(x, t) { return r.alerta && v(x) > 100 ? '<span class="r-over">' + t + '</span>' : t; }
+      var d = trava ? M : (r.d ? r.d(v(m.a), v(m.b)) : D);
+      return '<tr' + (r.tot ? ' class="r-tot"' : '') + '><th scope="row">' + r.l + '</th><td>' + (r.hojeNA ? D : f(m.hoje)) +
+        '</td><td class="r-a">' + al(m.a, f(m.a)) + '</td><td class="r-b">' + al(m.b, f(m.b)) + '</td><td>' + d + '</td></tr>';
+    }).join('');
+  }
+  function relatorio() {
+    var u = ultimo, p = u.p, m = u.m;
+    var hoje = new Date().toLocaleDateString('pt-BR');
+    var emp = $('c5Emp').value.trim();
+    var sub = 'Escala 6x1 para 5x2 · EC nº 141/2026<br>Emitido em ' + hoje;
+    var grupo = n0.format(p.n) + (p.n === 1 ? ' colaborador' : ' colaboradores') + ' · etapa de ' + p.J + 'h semanais' + (emp ? ' · ' + esc(emp) : '');
+    var fv = p.n > 0 && p.S > 0;
+    function tile(cls, rot, txt) { return '<div class="' + cls + '"><span>' + rot + '</span><b>' + txt + '</b></div>'; }
+    var etapas = [42, 40].map(function (J) {
+      var e = modelo(p, J);
+      return '<tr><th scope="row">' + J + 'h</th><td>' + h(e.H) + '</td><td>' + brl.format(e.a.total * 12) + '</td><td>' + brl.format(e.b.total * 12) + '</td><td>' + n0.format(e.k) + '</td></tr>';
+    }).join('');
+    var prem = premissas(p).map(function (x) { return '<div><dt>' + x[0] + '</dt><dd>' + x[1] + '</dd></div>'; }).join('');
+    var aberto = liberado
+      ? '<h3>As duas etapas, em custo anual</h3><table class="r-t r-et"><thead><tr><th scope="col">Jornada</th><th scope="col">Horas a cobrir/mês</th><th scope="col">Hora extra / ano</th><th scope="col">Contratar / ano</th><th scope="col">Pessoas</th></tr></thead><tbody>' + etapas + '</tbody></table>' +
+        '<h3>Premissas usadas</h3><dl class="r-prem">' + prem + '</dl>'
+      : '<p class="r-trava">A projeção das etapas, as premissas e a composição do custo fazem parte do estudo completo, disponível em hcgconsultoria.com.br/calculadora-5x2.</p>';
+
+    relBox.innerHTML =
+      '<section class="r-pg">' + relTopo(sub) + '<div class="r-corpo">' +
+        '<p class="r-eyebrow">Hora extra ou contratação</p><h1>Fim da escala 6x1: resultado da simulação</h1><p class="r-grupo">' + grupo + '</p>' +
+        '<div class="r-concl"><p class="r-eyebrow">Conclusão</p><h2>' + esc(u.titulo) + '</h2><p>' + esc(u.texto) + '</p></div>' +
+        '<div class="r-tiles">' +
+          tile(u.best === 'a' ? 'best' : '', 'A · Manter o quadro + hora extra, em 12 meses', fv ? '+' + brl.format(Math.max(0, u.dA)) : D) +
+          tile(u.best === 'b' ? 'best' : '', 'B · Contratar' + (m.k ? ' ' + pessoas(m.k) : '') + ', em 12 meses', fv ? '+' + brl.format(Math.max(0, u.dB)) : D) +
+          tile('', 'Horas a cobrir por mês', fv ? h(m.H) : D) +
+        '</div>' + aberto +
+        '<div class="r-lim"><b>Limites da estimativa.</b> Simulação com grupo e salário médios. Não considera feriados, férias, afastamentos, turnover, adicional noturno sobre horas extras ou regras da convenção coletiva. Distribuir 42h em cinco dias (8h24 por dia) depende de norma coletiva; sem ela, a referência prudente é 40h. O critério do DSR com dois repousos ainda não está pacificado. Este estudo não constitui parecer jurídico e deve ser validado com os dados da empresa e sua assessoria jurídica.</div>' +
+      '</div>' + relPe(1) + '</section>' +
+      '<section class="r-pg">' + relTopo(sub) + '<div class="r-corpo">' +
+        '<h2 class="r-h2">Confronto linha a linha</h2><p class="r-grupo">Valores mensais, salvo indicação. B − A mostra quanto contratar custa a mais (+) ou a menos (−) que manter o quadro com hora extra.</p>' +
+        '<table class="r-t r-conf" data-best="' + u.best + '"><thead><tr><th scope="col">Linha</th><th scope="col">Hoje</th><th scope="col" class="r-a">A · Manter o quadro + hora extra</th><th scope="col" class="r-b">B · Contratar' + (m.k ? ' ' + pessoas(m.k) : '') + '</th><th scope="col">B − A</th></tr></thead><tbody>' + relLinhas(m) + '</tbody></table>' +
+        '<div class="r-cta"><div><p class="r-eyebrow">Próximo passo</p><h3>Leve a decisão para os dados reais</h3><p>A HCG mede o impacto por estabelecimento, categoria e função, com folha, ponto e normas coletivas.</p></div>' +
+        '<ul><li><span>WhatsApp</span><a href="https://wa.me/' + WHATSAPP + '">' + TEL + '</a></li><li><span>E-mail</span><a href="mailto:' + EMAIL + '">' + EMAIL + '</a></li><li><span>Site</span><a href="https://hcgconsultoria.com.br/">hcgconsultoria.com.br</a></li><li><span>LinkedIn</span><a href="' + LINKEDIN + '">HCG Consultoria</a></li></ul></div>' +
+      '</div>' + relPe(2) + '</section>';
+  }
+  var tituloSite = document.title;
+  window.addEventListener('beforeprint', function () { document.title = TITULO_PDF; });
+  window.addEventListener('afterprint', function () { document.title = tituloSite; });
+
   /* ===== Tela ===== */
   var ultimo = null;
   function pessoas(k) { return k === 1 ? '1 pessoa' : n0.format(k) + ' pessoas'; }
@@ -233,7 +309,8 @@
     $('c5Etapas').innerHTML = html;
     $('c5Prem').innerHTML = premissas(p).map(function (x) { return '<div><dt>' + x[0] + '</dt><dd>' + x[1] + '</dd></div>'; }).join('');
 
-    ultimo = { p: p, m: m, titulo: titulo, dA: dA, dB: dB };
+    ultimo = { p: p, m: m, titulo: titulo, texto: texto, dA: dA, dB: dB, best: best };
+    relatorio();
   }
 
   function aplicaLiberacao() {
