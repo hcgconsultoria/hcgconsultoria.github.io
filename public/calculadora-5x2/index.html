@@ -93,11 +93,12 @@
           <label><input type="radio" name="c5J" value="40"><span><b>40h</b><small>desde 16/12/2027</small></span></label>
         </fieldset>
         <div class="fields">
-          <div class="field"><label for="c5N">Colaboradores na 6x1</label><input id="c5N" inputmode="numeric" value="50" autocomplete="off"></div>
-          <div class="field"><label for="c5Sal">Salário médio (R$)</label><input id="c5Sal" inputmode="decimal" value="2.500" autocomplete="off"></div>
-          <div class="field"><label for="c5HE">Horas extras por colaborador/mês</label><input id="c5HE" inputmode="decimal" value="10" autocomplete="off" aria-describedby="c5HEh"></div>
+          <div class="field"><label for="c5N">Colaboradores na 6x1</label><input id="c5N" inputmode="numeric" value="" placeholder="Ex.: 1.000" autocomplete="off"></div>
+          <div class="field"><label for="c5Sal">Salário médio (R$)</label><input id="c5Sal" inputmode="decimal" value="" placeholder="Ex.: 3.000" autocomplete="off"></div>
+          <div class="field"><label for="c5HE">Horas extras por colaborador/mês</label><input id="c5HE" inputmode="decimal" value="" placeholder="Ex.: 8" autocomplete="off" aria-describedby="c5HEh"></div>
           <div class="field"><label for="c5Ad">Adicional de hora extra (%)</label><input id="c5Ad" inputmode="decimal" value="50" autocomplete="off"></div>
-          <small class="c5-hint full" id="c5HEh">Use a média dos últimos 12 meses.</small>
+          <small class="c5-hint full" id="c5HEh">Use a média dos últimos 12 meses. Se não houver horas extras, informe 0.</small>
+          <div class="field full"><label for="c5U">Unidades ou estabelecimentos</label><input id="c5U" inputmode="numeric" value="" placeholder="1" autocomplete="off" aria-describedby="c5UH"><small class="c5-hint" id="c5UH">O quadro é dividido igualmente, e cada unidade com horas a cobrir recebe pelo menos 1 contratação.</small></div>
           <div class="field full"><label for="c5Reorg">Absorvido reorganizando as escalas: <b id="c5ReorgV">20%</b></label><input id="c5Reorg" type="range" min="0" max="100" step="5" value="20" aria-describedby="c5ReorgH"><small class="c5-hint" id="c5ReorgH">Parte das horas perdidas que a operação cobre sem custo, ajustando turnos, picos e folgas.</small></div>
           <div class="field full"><label for="c5Regime">Regime tributário</label><select id="c5Regime"><option value="36,8">Lucro Real ou Presumido</option><option value="8">Simples (exceto Anexo IV)</option><option value="31">Simples Anexo IV</option><option value="">Outro</option></select></div>
           <div class="field full"><label for="c5Enc">Encargos e FGTS (%)</label><input id="c5Enc" inputmode="decimal" value="36,8" autocomplete="off"></div>
@@ -127,6 +128,7 @@
           <div id="c5TBb"><span id="c5TBl">Contratar · 12 meses</span><b id="c5TB"></b></div>
           <div><span>Horas a cobrir por mês</span><b id="c5TH"></b></div>
         </div>
+        <p class="c5-uni" id="c5Uni" hidden></p>
 
         <h3 class="c5-h">Confronto linha a linha</h3>
         <div class="c5-wrap">
@@ -200,7 +202,7 @@
       <details><summary>Valor da hora</summary><p>Salário com adicionais habituais ÷ divisor mensal (jornada semanal × 5: 220h, 210h ou 200h). O salário é mantido, sem redução.</p></details>
       <details><summary>DSR sobre horas extras</summary><p>Valor das horas extras × repousos ÷ dias úteis. Na 6x1, 4 ÷ 26. Na 5x2, o padrão é 8 ÷ 22, com alternativas nos ajustes avançados, pois o critério com dois repousos ainda não está pacificado.</p></details>
       <details><summary>Encargos e provisões</summary><p>Sobre a remuneração incidem 13º (1/12) e férias + 1/3 (4/36). Sobre o conjunto incidem encargos e FGTS, conforme o percentual informado.</p></details>
-      <details><summary>Contratação</summary><p>O número de pessoas é arredondado para cima. A capacidade que sobrar absorve horas extras já existentes. Entram salário, encargos, provisões, benefícios, vale-transporte e custo único de admissão.</p></details>
+      <details><summary>Contratação</summary><p>O número de pessoas é arredondado para cima em cada unidade, com o quadro dividido igualmente entre elas. A capacidade que sobrar absorve horas extras já existentes. Entram salário, encargos, provisões, benefícios, vale-transporte e custo único de admissão.</p></details>
       <details><summary>Limites da estimativa</summary><p>Não considera feriados, férias, afastamentos, turnover, adicional noturno sobre horas extras ou regras da convenção coletiva. Parte dos temas depende de regulamentação e da interpretação dos tribunais. O resultado é uma estimativa e deve ser validado com os dados da empresa e sua assessoria jurídica.</p></details>
     </div>
   </section>
