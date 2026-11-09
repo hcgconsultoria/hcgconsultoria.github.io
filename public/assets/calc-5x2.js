@@ -34,11 +34,9 @@
   function leitura() {
     var d = $('c5Dsr').value.split(',');
     var j = document.querySelector('input[name="c5J"]:checked');
-    var n = Math.min(1000000, Math.round(val('c5N')));
     return {
       J: +j.value,
-      n: n,
-      U: Math.max(1, Math.min(n, Math.round(val('c5U')))),  // unidades, com o quadro dividido igualmente
+      n: Math.min(1000000, Math.round(val('c5N'))),
       S: val('c5Sal'),
       J0: val('c5J0') || 44,
       E: val('c5HE'),
@@ -66,8 +64,7 @@
     return x;
   }
 
-  function modelo(p, J, unidades) {
-    var U = unidades || p.U;
+  function modelo(p, J) {
     var base = p.S + p.adic;
     var Jn = Math.min(p.J0, J);
     var h0 = base / (p.J0 * 5), h1 = base / (Jn * 5);
@@ -87,7 +84,7 @@
 
     var Jh = p.tipo === 'parcial' ? Math.min(30, Jn) : Jn;
     var cap = Jh * SEMANAS;
-    var k = H > 0 ? U * Math.ceil(H / U / cap - 1e-9) : 0;  // arredonda para cima em cada unidade
+    var k = H > 0 ? Math.ceil(H / cap - 1e-9) : 0;
     var folga = k * cap - H;
     var hRes = Math.max(0, hE - folga);
     var bAt = hRes * h1 * (1 + p.ad);
@@ -207,7 +204,7 @@
     var hoje = new Date().toLocaleDateString('pt-BR');
     var emp = $('c5Emp').value.trim();
     var sub = 'Escala 6x1 para 5x2 · EC nº 141/2026<br>Emitido em ' + hoje;
-    var grupo = n0.format(p.n) + (p.n === 1 ? ' colaborador' : ' colaboradores') + (p.U > 1 ? ' em ' + n0.format(p.U) + ' unidades' : '') + ' · etapa de ' + p.J + 'h semanais' + (emp ? ' · ' + esc(emp) : '');
+    var grupo = n0.format(p.n) + (p.n === 1 ? ' colaborador' : ' colaboradores') + ' · etapa de ' + p.J + 'h semanais' + (emp ? ' · ' + esc(emp) : '');
     var fv = p.n > 0 && p.S > 0;
     function tile(cls, rot, txt) { return '<div class="' + cls + '"><span>' + rot + '</span><b>' + txt + '</b></div>'; }
     var etapas = [42, 40].map(function (J) {
@@ -230,8 +227,8 @@
           tile(u.best === 'a' ? 'best' : '', 'A · Manter o quadro + hora extra, em 12 meses', fv ? '+' + brl.format(Math.max(0, u.dA)) : D) +
           tile(u.best === 'b' ? 'best' : '', 'B · Contratar' + (m.k ? ' ' + pessoas(m.k) : '') + ', em 12 meses', fv ? '+' + brl.format(Math.max(0, u.dB)) : D) +
           tile('', 'Horas a cobrir por mês', fv ? h(m.H) : D) +
-        '</div>' + (u.uni ? '<p class="r-uni">' + esc(u.uni) + '</p>' : '') + aberto +
-        '<div class="r-lim"><b>Limites da estimativa.</b> Simulação com grupo e salário médios, com o quadro dividido igualmente entre as unidades. Não considera feriados, férias, afastamentos, turnover, adicional noturno sobre horas extras ou regras da convenção coletiva. Distribuir 42h em cinco dias (8h24 por dia) depende de norma coletiva; sem ela, a referência prudente é 40h. O critério do DSR com dois repousos ainda não está pacificado. Este estudo não constitui parecer jurídico e deve ser validado com os dados da empresa e sua assessoria jurídica.</div>' +
+        '</div>' + aberto +
+        '<div class="r-lim"><b>Limites da estimativa.</b> Simulação com grupo e salário médios, sem segregar por estabelecimento: encargos como RAT, FAP e terceiros, além da necessidade de contratação, podem variar em cada um. Não considera feriados, férias, afastamentos, turnover, adicional noturno sobre horas extras ou regras da convenção coletiva. Distribuir 42h em cinco dias (8h24 por dia) depende de norma coletiva; sem ela, a referência prudente é 40h. O critério do DSR com dois repousos ainda não está pacificado. Este estudo não constitui parecer jurídico e deve ser validado com os dados da empresa e sua assessoria jurídica.</div>' +
       '</div>' + relPe(1) + '</section>' +
       '<section class="r-pg">' + relTopo(sub) + '<div class="r-corpo">' +
         '<h2 class="r-h2">Confronto linha a linha</h2><p class="r-grupo">Valores mensais, salvo indicação. B − A mostra quanto contratar custa a mais (+) ou a menos (−) que manter o quadro com hora extra.</p>' +
@@ -252,7 +249,6 @@
     var dsrTxt = p.rep + ' repousos em ' + p.dU + ' dias úteis';
     return [
       ['Colaboradores na 6x1', n0.format(p.n)],
-      ['Unidades ou estabelecimentos', n0.format(p.U)],
       ['Salário médio', brl2.format(p.S)],
       ['Adicionais habituais por colaborador', brl2.format(p.adic)],
       ['Jornada atual', p.J0 + 'h'],
@@ -312,19 +308,6 @@
     $('c5Tbl').setAttribute('data-best', best);
     tabela(m);
 
-    // Efeito de dividir a operação em unidades
-    var uni = '';
-    if (valido && !semPerda && p.U > 1) {
-      var uma = modelo(p, p.J, 1);
-      if (uma.k !== m.k) {
-        var difU = b.ano - uma.b.ano;
-        uni = 'Com ' + n0.format(p.U) + ' unidades, são ' + pessoas(m.k) + ' a contratar, contra ' + pessoas(uma.k) + ' em uma operação única' +
-          (Math.abs(difU) < 1 ? '.' : ': ' + brl.format(Math.abs(difU)) + (difU > 0 ? ' a mais' : ' a menos') + ' em 12 meses.');
-      }
-    }
-    $('c5Uni').textContent = uni;
-    $('c5Uni').hidden = !uni;
-
     // Duas etapas
     var html = '';
     [42, 40].forEach(function (J) {
@@ -335,7 +318,7 @@
     $('c5Etapas').innerHTML = html;
     $('c5Prem').innerHTML = premissas(p).map(function (x) { return '<div><dt>' + x[0] + '</dt><dd>' + x[1] + '</dd></div>'; }).join('');
 
-    ultimo = { p: p, m: m, titulo: titulo, texto: texto, dA: dA, dB: dB, best: best, uni: uni };
+    ultimo = { p: p, m: m, titulo: titulo, texto: texto, dA: dA, dB: dB, best: best };
     relatorio();
     aplicaLiberacao();
   }

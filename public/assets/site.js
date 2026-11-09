@@ -65,8 +65,8 @@
     banner.className = 'cookie';
     banner.setAttribute('role', 'region');
     banner.setAttribute('aria-label', 'Aviso de cookies');
-    banner.innerHTML = '<p><b>Sua privacidade</b>Usamos cookies de análise (Google Analytics, Microsoft Clarity e LinkedIn) para medir as visitas e melhorar o site. Eles só são ativados com a sua autorização. <a href="/privacidade/">Política de privacidade</a></p>' +
-      '<div class="cookie-act"><button type="button" class="btn btn-line" data-c="nao">Recusar</button><button type="button" class="btn btn-gold" data-c="sim">Aceitar</button></div>';
+    banner.innerHTML = '<p>Utilizamos cookies para oferecer melhor experiência, melhorar o desempenho e analisar como você interage em nosso site. <a href="/privacidade/">Política de privacidade</a></p>' +
+      '<div class="cookie-act"><button type="button" class="btn btn-line" data-c="nao">Recusar cookies</button><button type="button" class="btn btn-gold" data-c="sim">Aceitar cookies</button></div>';
     banner.addEventListener('click', function (e) {
       var b = e.target.closest('[data-c]');
       if (!b) return;
