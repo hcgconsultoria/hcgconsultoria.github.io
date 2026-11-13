@@ -63,7 +63,11 @@ def r_aviso(c):
     if not a.get('ativo'):
         return ''
     until = f' data-until="{attr(a["expira"])}"' if a.get('expira') else ''
-    link = f'<a href="{attr(a["link_url"])}">{esc(a["link_texto"])}</a>' if a.get('link_url') else ''
+    url = str(a.get('link_url') or '').strip()
+    # só links internos (/pagina/) ou https://: bloqueia javascript:, data: e afins
+    if url and not re.match(r'(/(?!/)|#|https://)', url):
+        raise SystemExit(f'Endereço do link do aviso inválido: {url!r} (use /pagina/ ou https://...)')
+    link = f'<a href="{attr(url)}">{esc(a["link_texto"])}</a>' if url else ''
     return (f'<div class="fap-strip"{until}>\n    <div class="wrap"><span><svg aria-hidden="true"><use href="#i-alert"/></svg>'
             f'<b>{esc(a["destaque"])}</b> {esc(a["texto"])}</span>{link}</div>\n  </div>')
 
