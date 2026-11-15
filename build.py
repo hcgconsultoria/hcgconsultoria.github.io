@@ -179,6 +179,43 @@ RENDER = {
 MARK = re.compile(r'<!--cms:([a-z0-9-]+)-->(.*?)<!--/cms:\1-->', re.S)
 
 
+SITE = 'https://hcgconsultoria.com.br'
+
+
+def _texto(fragmento):
+    return re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', '', fragmento))).strip()
+
+
+def auto_ld(s, url):
+    """Dados estruturados gerados a partir da própria página: trilha (BreadcrumbList),
+    perguntas frequentes (FAQPage) e, nas páginas de serviço, o serviço (Service)."""
+    blocos = []
+    nav = re.search(r'<nav class="crumbs"[^>]*>(.*?)</nav>', s, re.S)
+    if nav:
+        itens = [(SITE + h, _texto(t)) for h, t in re.findall(r'<a href="(/[^"]*)">(.*?)</a>', nav.group(1))]
+        ult = [x for x in re.findall(r'<span(?: aria-current="page")?>(.*?)</span>', nav.group(1)) if _texto(x) not in ('/', '')]
+        if ult:
+            itens.append((SITE + url, _texto(ult[-1])))
+        blocos.append({'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
+            {'@type': 'ListItem', 'position': i, 'name': n, 'item': u} for i, (u, n) in enumerate(itens, 1)]})
+    if '"FAQPage"' not in s and '<div class="faq"' in s:
+        qa = re.findall(r'<details[^>]*>\s*<summary>(.*?)</summary>\s*<p>(.*?)</p>\s*</details>', s, re.S)
+        if qa:
+            blocos.append({'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
+                {'@type': 'Question', 'name': _texto(q), 'acceptedAnswer': {'@type': 'Answer', 'text': _texto(a)}} for q, a in qa]})
+    if re.fullmatch(r'/servicos/[a-z0-9-]+/', url):
+        h1 = re.search(r'<h1[^>]*>(.*?)</h1>', s, re.S)
+        desc = re.search(r'<meta name="description" content="([^"]*)"', s)
+        blocos.append({'@context': 'https://schema.org', '@type': 'Service', 'name': _texto(h1.group(1)) if h1 else '',
+                       'description': html.unescape(desc.group(1)) if desc else '', 'url': SITE + url, 'areaServed': 'BR',
+                       'provider': {'@id': SITE + '/#organizacao'}})
+    if not blocos:
+        return s
+    tags = ''.join('<script type="application/ld+json">' + json.dumps(b, ensure_ascii=False).replace('</', '<\\/') + '</script>\n'
+                   for b in blocos)
+    return s.replace('</head>', tags + '</head>', 1)
+
+
 def contact_swaps(contato):
     """Pares (valor original -> valor atual) de contato, aplicados em todo o site."""
     digits = re.sub(r'\D', '', contato['whatsapp'])
@@ -222,6 +259,8 @@ def build():
                 used.add(key)
                 return RENDER[key](c)
             s = MARK.sub(sub, s)
+            if p.name == 'index.html' and p.parent.name != 'admin':
+                s = auto_ld(s, '/' + '/'.join(p.parent.relative_to(DIST).parts) + ('/' if p.parent != DIST else ''))
             s = re.sub(r'(/assets/(site\.(?:css|js)|calc-5x2\.js))\?v=[\w-]+', lambda m: f'{m.group(1)}?v={ver[m.group(2)]}', s)
         for a, b in swaps:
             s = s.replace(a, b)
