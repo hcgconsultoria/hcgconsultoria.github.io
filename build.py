@@ -209,6 +209,19 @@ def auto_ld(s, url):
         blocos.append({'@context': 'https://schema.org', '@type': 'Service', 'name': _texto(h1.group(1)) if h1 else '',
                        'description': html.unescape(desc.group(1)) if desc else '', 'url': SITE + url, 'areaServed': 'BR',
                        'provider': {'@id': SITE + '/#organizacao'}})
+    if re.fullmatch(r'/artigos/[a-z0-9-]+/', url):
+        h1 = re.search(r'<h1[^>]*>(.*?)</h1>', s, re.S)
+        desc = re.search(r'<meta name="description" content="([^"]*)"', s)
+        dt = re.search(r'<time datetime="(\d{4}-\d{2}-\d{2})"', s)
+        autor = re.search(r'class="art-meta">Por <a href="([^"]*)">(.*?)</a>', s)
+        art = {'@context': 'https://schema.org', '@type': 'Article', 'headline': _texto(h1.group(1)) if h1 else '',
+               'description': html.unescape(desc.group(1)) if desc else '', 'inLanguage': 'pt-BR',
+               'mainEntityOfPage': SITE + url, 'image': SITE + '/og-image.png', 'publisher': {'@id': SITE + '/#organizacao'}}
+        if dt:
+            art['datePublished'] = art['dateModified'] = dt.group(1)
+        if autor:
+            art['author'] = {'@type': 'Person', 'name': _texto(autor.group(2)), 'url': SITE + autor.group(1)}
+        blocos.append(art)
     if not blocos:
         return s
     tags = ''.join('<script type="application/ld+json">' + json.dumps(b, ensure_ascii=False).replace('</', '<\\/') + '</script>\n'
