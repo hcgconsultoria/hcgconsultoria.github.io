@@ -32,7 +32,9 @@
 
   /* ===== Modelo ===== */
   function leitura() {
-    var d = $('c5Dsr').value.split(',');
+    var dU = Math.round(val('c5DU')), rep = Math.round(val('c5Rep'));
+    if ($('c5DU').value.trim() === '' || dU < 1 || dU > 31) dU = 22;
+    if ($('c5Rep').value.trim() === '' || rep > 31) rep = 8;
     var j = document.querySelector('input[name="c5J"]:checked');
     return {
       J: +j.value,
@@ -48,8 +50,8 @@
       adm: val('c5Adm'),
       vt: val('c5Vt'),
       r: Math.min(100, val('c5Reorg')) / 100,
-      rep: +d[0],
-      dU: +d[1],
+      rep: rep,
+      dU: dU,
       tipo: $('c5Tipo').value
     };
   }
@@ -246,7 +248,7 @@
   function pessoas(k) { return k === 1 ? '1 pessoa' : n0.format(k) + ' pessoas'; }
 
   function premissas(p) {
-    var dsrTxt = p.rep + ' repousos em ' + p.dU + ' dias úteis';
+    var dsrTxt = p.rep + ' dias não úteis em ' + p.dU + ' dias úteis';
     return [
       ['Colaboradores na 6x1', n0.format(p.n)],
       ['Salário médio', brl2.format(p.S)],

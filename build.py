@@ -217,8 +217,14 @@ def auto_ld(s, url):
         art = {'@context': 'https://schema.org', '@type': 'Article', 'headline': _texto(h1.group(1)) if h1 else '',
                'description': html.unescape(desc.group(1)) if desc else '', 'inLanguage': 'pt-BR',
                'mainEntityOfPage': SITE + url, 'image': SITE + '/og-image.png', 'publisher': {'@id': SITE + '/#organizacao'}}
+        if not dt:
+            dt = re.search(r'<meta property="article:published_time" content="(\d{4}-\d{2}-\d{2})"', s)
         if dt:
             art['datePublished'] = art['dateModified'] = dt.group(1)
+            mod = (re.search(r'<time datetime="(\d{4}-\d{2}-\d{2})" data-atualizado>', s)
+                   or re.search(r'<meta property="article:modified_time" content="(\d{4}-\d{2}-\d{2})"', s))
+            if mod:
+                art['dateModified'] = mod.group(1)
         if autor:
             art['author'] = {'@type': 'Person', 'name': _texto(autor.group(2)), 'url': SITE + autor.group(1)}
         blocos.append(art)
