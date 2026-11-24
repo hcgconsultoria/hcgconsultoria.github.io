@@ -35,6 +35,7 @@
     var dU = Math.round(val('c5DU')), rep = Math.round(val('c5Rep'));
     if ($('c5DU').value.trim() === '' || dU < 1 || dU > 31) dU = 22;
     if ($('c5Rep').value.trim() === '' || rep > 31) rep = 8;
+    var portaria = $('c5DsrC').value === 'portaria';
     var j = document.querySelector('input[name="c5J"]:checked');
     return {
       J: +j.value,
@@ -52,6 +53,7 @@
       r: Math.min(100, val('c5Reorg')) / 100,
       rep: rep,
       dU: dU,
+      portaria: portaria,
       tipo: $('c5Tipo').value
     };
   }
@@ -73,7 +75,7 @@
     var perda = Math.max(0, p.J0 - Jn) * SEMANAS;
     var H = p.n * perda * (1 - p.r);
     var hE = p.n * p.E;
-    var f0 = 4 / 26, f1 = p.rep / p.dU;
+    var f0 = 4 / 26, f1 = p.portaria ? 1 / 6 : p.rep / p.dU;
     function vt(dias, sal) { return Math.max(0, dias * p.vt - 0.06 * sal); }
     var fatorHE = (1 + 1 / 12 + 4 / 36) * (1 + p.enc);
 
@@ -230,7 +232,7 @@
           tile(u.best === 'b' ? 'best' : '', 'B · Contratar' + (m.k ? ' ' + pessoas(m.k) : '') + ', em 12 meses', fv ? '+' + brl.format(Math.max(0, u.dB)) : D) +
           tile('', 'Horas a cobrir por mês', fv ? h(m.H) : D) +
         '</div>' + aberto +
-        '<div class="r-lim"><b>Limites da estimativa.</b> Simulação com grupo e salário médios, sem segregar por estabelecimento: encargos como RAT, FAP e terceiros, além da necessidade de contratação, podem variar em cada um. Não considera feriados, férias, afastamentos, turnover, adicional noturno sobre horas extras ou regras da convenção coletiva. Distribuir 42h em cinco dias (8h24 por dia) depende de norma coletiva; sem ela, a referência prudente é 40h. O critério do DSR com dois repousos ainda não está pacificado. Este estudo não constitui parecer jurídico e deve ser validado com os dados da empresa e sua assessoria jurídica.</div>' +
+        '<div class="r-lim"><b>Limites da estimativa.</b> Simulação com grupo e salário médios, sem segregar por estabelecimento: encargos como RAT, FAP e terceiros, além da necessidade de contratação, podem variar em cada um. Não considera feriados, férias, afastamentos, turnover, adicional noturno sobre horas extras ou regras da convenção coletiva. Distribuir 42h em cinco dias (8h24 por dia) depende de norma coletiva; sem ela, a referência prudente é 40h. O DSR na 5x2 segue a Portaria MTE nº 2.041/2026 (1/6 do valor das horas extras), salvo outro critério informado nos ajustes avançados. Este estudo não constitui parecer jurídico e deve ser validado com os dados da empresa e sua assessoria jurídica.</div>' +
       '</div>' + relPe(1) + '</section>' +
       '<section class="r-pg">' + relTopo(sub) + '<div class="r-corpo">' +
         '<h2 class="r-h2">Confronto linha a linha</h2><p class="r-grupo">Valores mensais, salvo indicação. B − A mostra quanto contratar custa a mais (+) ou a menos (−) que manter o quadro com hora extra.</p>' +
@@ -248,7 +250,7 @@
   function pessoas(k) { return k === 1 ? '1 pessoa' : n0.format(k) + ' pessoas'; }
 
   function premissas(p) {
-    var dsrTxt = p.rep + ' dias não úteis em ' + p.dU + ' dias úteis';
+    var dsrTxt = p.portaria ? 'Portaria MTE nº 2.041/2026: 1/6 das horas extras' : p.rep + ' dias não úteis em ' + p.dU + ' dias úteis';
     return [
       ['Colaboradores na 6x1', n0.format(p.n)],
       ['Salário médio', brl2.format(p.S)],
@@ -337,6 +339,12 @@
     if (!iniciou) { iniciou = true; track('calc_5x2_inicio'); }
     calc();
   });
+  function dsrCampos() {
+    var dias = $('c5DsrC').value === 'dias';
+    Array.prototype.forEach.call(root.querySelectorAll('[data-dsr-dias]'), function (el) { el.hidden = !dias; });
+  }
+  $('c5DsrC').addEventListener('change', function () { dsrCampos(); calc(); });
+  dsrCampos();
   $('c5Regime').addEventListener('change', function () {
     if (this.value) { $('c5Enc').value = this.value; calc(); }
   });

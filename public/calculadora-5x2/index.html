@@ -108,9 +108,10 @@
           <div class="fields">
             <div class="field"><label for="c5J0">Jornada atual (h/semana)</label><input id="c5J0" inputmode="numeric" value="44" autocomplete="off"></div>
             <div class="field"><div class="c5-lab"><label for="c5Adic">Adicionais habituais (R$/mês)</label><button type="button" class="c5-aj" id="c5AdicAj" aria-label="O que são adicionais habituais?" aria-expanded="false" aria-controls="c5AdicTip">?</button><div class="c5-tip" id="c5AdicTip" role="tooltip"><b>O que são adicionais habituais?</b>Valores pagos todo mês que entram na base da hora extra: periculosidade, insalubridade, adicional noturno fixo, gratificações e anuênios.<span>Informe a média em R$ por colaborador. Se só parte do grupo recebe, divida o total pago pelo número de colaboradores.</span><span>Exemplo: periculosidade de 30% sobre R$ 2.500 = R$ 750.</span><span>Não inclua comissões nem horas extras.</span></div></div><input id="c5Adic" inputmode="decimal" value="0" autocomplete="off" aria-describedby="c5AdicTip"></div>
-            <div class="field"><label for="c5DU">Dias úteis no mês (5x2)</label><input id="c5DU" inputmode="numeric" value="22" autocomplete="off" aria-describedby="c5DsrH"></div>
-            <div class="field"><label for="c5Rep">Dias não úteis no mês (5x2)</label><input id="c5Rep" inputmode="numeric" value="8" autocomplete="off" aria-describedby="c5DsrH"></div>
-            <small class="c5-hint full" id="c5DsrH">Critério do DSR na 5x2, ainda não pacificado. Dias não úteis são os repousos e feriados do mês. O DSR sobre horas extras é calculado por dias não úteis ÷ dias úteis.</small>
+            <div class="field full"><label for="c5DsrC">Critério do DSR na 5x2</label><select id="c5DsrC" aria-describedby="c5DsrH"><option value="portaria" selected>Portaria MTE nº 2.041/2026: 1/6 das horas extras</option><option value="dias">Informar dias úteis e não úteis</option></select></div>
+            <div class="field" data-dsr-dias hidden><label for="c5DU">Dias úteis no mês (5x2)</label><input id="c5DU" inputmode="numeric" value="22" autocomplete="off" aria-describedby="c5DsrH"></div>
+            <div class="field" data-dsr-dias hidden><label for="c5Rep">Dias não úteis no mês (5x2)</label><input id="c5Rep" inputmode="numeric" value="8" autocomplete="off" aria-describedby="c5DsrH"></div>
+            <small class="c5-hint full" id="c5DsrH">A Portaria MTE nº 2.041/2026 fixa o reflexo das horas extras no DSR em 1/6 do valor da semana. Para testar outro critério, informe os dias úteis e não úteis (repousos e feriados) do mês: o DSR passa a ser dias não úteis ÷ dias úteis.</small>
             <div class="field full"><label for="c5Tipo">Tipo de contratação</label><select id="c5Tipo"><option value="integral" selected>Tempo integral</option><option value="parcial">Tempo parcial (30h semanais)</option></select></div>
             <div class="field"><label for="c5Ben">Benefícios por contratado (R$)</label><input id="c5Ben" inputmode="decimal" value="700" autocomplete="off"></div>
             <div class="field"><label for="c5Adm">Admissão por contratado (R$)</label><input id="c5Adm" inputmode="decimal" value="500" autocomplete="off" aria-describedby="c5AdmH"><small class="c5-hint" id="c5AdmH">Exame admissional, divulgação da vaga, uniforme e integração.</small></div>
@@ -201,7 +202,7 @@
       <div class="sec-head"><p class="eyebrow">Transparência</p><h2>Como o cálculo é feito</h2></div>
       <details open><summary>Horas a cobrir</summary><p>Colaboradores × horas semanais reduzidas × 4,33 semanas por mês × parte não absorvida pela reorganização.</p></details>
       <details><summary>Valor da hora</summary><p>Salário com adicionais habituais ÷ divisor mensal (jornada semanal × 5: 220h, 210h ou 200h). O salário é mantido, sem redução.</p></details>
-      <details><summary>DSR sobre horas extras</summary><p>Valor das horas extras × repousos ÷ dias úteis. Na 6x1, 4 ÷ 26. Na 5x2, o padrão é 8 ÷ 22. Como o critério com dois repousos ainda não está pacificado, você pode informar os dias úteis e não úteis do mês nos ajustes avançados.</p></details>
+      <details><summary>DSR sobre horas extras</summary><p>Valor das horas extras × repousos ÷ dias úteis. Na 6x1, 4 ÷ 26. Na 5x2, a calculadora usa a regra da Portaria MTE nº 2.041/2026: 1/6 do valor das horas extras. Nos ajustes avançados, você pode testar outro critério informando os dias úteis e não úteis do mês.</p></details>
       <details><summary>Encargos e provisões</summary><p>Sobre a remuneração incidem 13º (1/12) e férias + 1/3 (4/36). Sobre o conjunto incidem encargos e FGTS, conforme o percentual informado.</p></details>
       <details><summary>Contratação</summary><p>O número de pessoas é arredondado para cima. A capacidade que sobrar absorve horas extras já existentes. Entram salário, encargos, provisões, benefícios, vale-transporte e custo único de admissão.</p></details>
       <details><summary>Limites da estimativa</summary><p>O cálculo usa um único grupo, sem segregar por estabelecimento. Encargos como RAT, FAP e terceiros, além da necessidade de contratação, podem variar em cada um. Não considera feriados, férias, afastamentos, turnover, adicional noturno sobre horas extras ou regras da convenção coletiva. Parte dos temas depende de regulamentação e da interpretação dos tribunais. O resultado é uma estimativa e deve ser validado com os dados da empresa e sua assessoria jurídica.</p></details>
@@ -248,6 +249,6 @@
 <div class="mbar"><a class="btn btn-gold" href="/contato/?assunto=Calculadora%205x2%3A%20estudo%20de%20impacto">Falar com a HCG</a><a class="btn btn-line" href="https://wa.me/5531993938133?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20HCG%20Consultoria." target="_blank" rel="noopener" aria-label="WhatsApp">WhatsApp</a></div>
 
 <script src="/assets/site.js?v=20261103e" defer></script>
-<script src="/assets/calc-5x2.js?v=2" defer></script>
+<script src="/assets/calc-5x2.js?v=3" defer></script>
 </body>
 </html>
