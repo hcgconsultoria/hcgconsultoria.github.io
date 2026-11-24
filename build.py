@@ -283,8 +283,6 @@ def build():
             s = re.sub(r'(/assets/(site\.(?:css|js)|calc-5x2\.js))\?v=[\w-]+', lambda m: f'{m.group(1)}?v={ver[m.group(2)]}', s)
         for a, b in swaps:
             s = s.replace(a, b)
-        if p.name == 'sitemap.xml':
-            s = re.sub(r'<lastmod>[^<]+</lastmod>', f'<lastmod>{datetime.date.today().isoformat()}</lastmod>', s)
         p.write_text(s, encoding='utf-8')
 
     missing = set(RENDER) - used
